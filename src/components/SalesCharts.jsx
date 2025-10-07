@@ -56,6 +56,8 @@ export default function SalesCharts() {
       }
 
       const data = await getAnalytics(token);
+      console.log('Analytics data received:', data);
+      
       if (data.error) {
         setError(data.message || 'Failed to fetch analytics data');
         return;
@@ -74,8 +76,12 @@ export default function SalesCharts() {
         categoryPerformance: data.categoryPerformance || []
       });
     } catch (err) {
-      setError('Failed to fetch analytics data. Please check your connection and try again.');
       console.error('Analytics error:', err);
+      if (err.name === 'TypeError' && err.message.includes('fetch')) {
+        setError('Cannot connect to server. Please make sure the backend is running.');
+      } else {
+        setError('Failed to fetch analytics data. Please check your connection and try again.');
+      }
     } finally {
       setLoading(false);
     }

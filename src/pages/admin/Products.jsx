@@ -37,12 +37,6 @@ export default function AdminProducts() {
       return;
     }
     
-    // Validate price is a valid number
-    if (isNaN(parseFloat(form.price)) || parseFloat(form.price) <= 0) {
-      alert('Please enter a valid price (positive number)');
-      return;
-    }
-    
     const formData = new FormData();
     Object.entries(form).forEach(([key, value]) => formData.append(key, value));
     if (imageFile) formData.append('image', imageFile);
@@ -76,7 +70,7 @@ export default function AdminProducts() {
       fileInputRef.current.value = '';
     } catch (error) {
       console.error('Error submitting product:', error);
-      alert(`Error submitting product: ${error.message || 'Please try again.'}`);
+      alert('Error submitting product. Please try again.');
     }
   };
 

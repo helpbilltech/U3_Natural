@@ -7,17 +7,19 @@ const auth = require('../middleware/auth');
 // Get comprehensive analytics data
 router.get('/', auth, async (req, res) => {
   try {
-    // Get all orders
-    const orders = await Order.find().populate('products.product');
+    // Get all confirmed/delivered orders (all-time data)
+    const orders = await Order.find({
+      status: { $in: ['confirmed', 'delivered'] }
+    }).populate('products.product');
     
-    // Calculate total sales
+    // Calculate total sales (only confirmed/delivered orders)
     const totalSales = orders.reduce((sum, order) => {
       return sum + order.products.reduce((orderSum, item) => {
         return orderSum + (item.product ? item.product.price * item.quantity : 0);
       }, 0);
     }, 0);
 
-    // Calculate total orders
+    // Calculate total orders (only confirmed/delivered)
     const totalOrders = orders.length;
 
     // Calculate average order value

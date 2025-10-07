@@ -351,32 +351,15 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4 }}
             viewport={{ once: true }}
           ></motion.div>
-          <motion.div 
-            className="text-center text-[#6b7280] max-w-4xl mx-auto mb-10"
+          <motion.p 
+            className="text-center text-[#6b7280] max-w-3xl mx-auto mb-10"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             viewport={{ once: true }}
           >
-            <p className="text-lg mb-6">
-              At U3 Natural, we believe true beauty begins with nature. 🌿<br/>
-              Every jar is prepared with love, using only pure, handpicked ingredients — no harsh chemicals, just nature's care. 💚
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-              <div className="bg-white/50 rounded-2xl p-6">
-                <h3 className="text-xl font-semibold text-[var(--rose-600)] mb-3">Our Mission</h3>
-                <p className="text-[#6b7280]">
-                  To provide you with the purest, most effective natural skincare products that enhance your natural beauty while respecting the environment and your skin's health.
-                </p>
-              </div>
-              <div className="bg-white/50 rounded-2xl p-6">
-                <h3 className="text-xl font-semibold text-[var(--rose-600)] mb-3">Our Promise</h3>
-                <p className="text-[#6b7280]">
-                  Every product is carefully crafted with organic ingredients, free from harmful chemicals, and tested for effectiveness. Your skin deserves the best nature has to offer.
-                </p>
-              </div>
-            </div>
-          </motion.div>
+            Founded with a passion for natural beauty and wellness, U3 Natural Product creates premium skincare solutions using only the finest natural ingredients.
+          </motion.p>
           <motion.div 
             className="bg-white rounded-3xl shadow-lg overflow-hidden max-w-4xl mx-auto group cursor-pointer"
             style={{ boxShadow: "var(--soft-shadow)" }}

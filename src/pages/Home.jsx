@@ -328,64 +328,32 @@ export default function Home() {
         </motion.section>
 
         {/* Our Story */}
-        <motion.section 
-          className="mb-24"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2 
-            className="text-3xl md:text-4xl font-extrabold text-center mb-2"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            Our Story
-          </motion.h2>
-          <motion.div 
-            className="h-1 w-24 mx-auto bg-[#d98893] rounded-full mb-6"
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-          ></motion.div>
-          <motion.p 
-            className="text-center text-[#6b7280] max-w-3xl mx-auto mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            viewport={{ once: true }}
-          >
-            At U3 Natural, we believe that true beauty doesn’t come from a lab — it begins with nature itself. 🌿
-            Every product we create is a celebration of purity, crafted with care from the finest handpicked ingredients sourced straight from the earth.
+        <section className="mb-24">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-2">Our Story</h2>
+          <div className="h-1 w-24 mx-auto bg-[#d98893] rounded-full mb-6"></div>
+          <p className="text-center text-[#6b7280] max-w-3xl mx-auto mb-10">Founded with a passion for natural beauty and wellness, U3 Natural Product creates premium skincare solutions using only the finest natural ingredients.</p>
 
-            No harsh chemicals. No artificial additives. Just clean, honest formulas designed to nourish your skin, body, and soul — the way nature intended. 💚
-
-            From the first touch, you’ll feel the difference — the softness of natural oils, the freshness of organic botanicals, and the peace of knowing what you’re putting on your skin is as pure as it gets.
-
-            Because at U3 Natural, beauty isn’t just about how you look — it’s about how you feel: refreshed, confident, and connected to the natural world around you. 🌸          </motion.p>
-          <motion.div 
-            className="bg-white rounded-3xl shadow-lg overflow-hidden max-w-4xl mx-auto group cursor-pointer"
-            style={{ boxShadow: "var(--soft-shadow)" }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            whileHover={{ 
-              scale: 1.02,
-              boxShadow: "0 25px 50px 0 rgba(217, 136, 147, 0.3)"
-            }}
-            transition={{ 
-              duration: 0.8, 
-              delay: 0.8,
-              type: "spring",
-              stiffness: 100
-            }}
-            viewport={{ once: true }}
-          >
-            
-          </motion.div>
-        </motion.section>
+          {/* Replaced the image with a text-focused card */}
+          <div className="bg-white rounded-3xl shadow-lg max-w-4xl mx-auto p-8" style={{ boxShadow: "var(--soft-shadow)" }}>
+            <div className="text-center text-[#6b7280] leading-relaxed space-y-4 whitespace-pre-line">
+              <p>
+                At U3 Natural, we believe that true beauty doesn’t come from a lab — it begins with nature itself. 🌿
+              </p>
+              <p>
+                Every product we create is a celebration of purity, crafted with care from the finest handpicked ingredients sourced straight from the earth.
+              </p>
+              <p>
+                No harsh chemicals. No artificial additives. Just clean, honest formulas designed to nourish your skin, body, and soul — the way nature intended. 💚
+              </p>
+              <p>
+                From the first touch, you’ll feel the difference — the softness of natural oils, the freshness of organic botanicals, and the peace of knowing what you’re putting on your skin is as pure as it gets.
+              </p>
+              <p>
+                Because at U3 Natural, beauty isn’t just about how you look — it’s about how you feel: refreshed, confident, and connected to the natural world around you. 🌸
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
       {modalSrc && <ImageModal src={modalSrc} alt={modalAlt} onClose={() => { setModalSrc(null); setModalAlt(''); }} />}
       <Footer />

@@ -358,8 +358,14 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.6 }}
             viewport={{ once: true }}
           >
-            Founded with a passion for natural beauty and wellness, U3 Natural Product creates premium skincare solutions using only the finest natural ingredients.
-          </motion.p>
+            At U3 Natural, we believe that true beauty doesn’t come from a lab — it begins with nature itself. 🌿
+            Every product we create is a celebration of purity, crafted with care from the finest handpicked ingredients sourced straight from the earth.
+
+            No harsh chemicals. No artificial additives. Just clean, honest formulas designed to nourish your skin, body, and soul — the way nature intended. 💚
+
+            From the first touch, you’ll feel the difference — the softness of natural oils, the freshness of organic botanicals, and the peace of knowing what you’re putting on your skin is as pure as it gets.
+
+            Because at U3 Natural, beauty isn’t just about how you look — it’s about how you feel: refreshed, confident, and connected to the natural world around you. 🌸          </motion.p>
           <motion.div 
             className="bg-white rounded-3xl shadow-lg overflow-hidden max-w-4xl mx-auto group cursor-pointer"
             style={{ boxShadow: "var(--soft-shadow)" }}
@@ -377,13 +383,7 @@ export default function Home() {
             }}
             viewport={{ once: true }}
           >
-            <motion.img 
-              src={logo} 
-              alt="story" 
-              className="w-full h-[360px] object-cover transition-transform duration-700 group-hover:scale-110" 
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.5 }}
-            />
+            
           </motion.div>
         </motion.section>
       </main>

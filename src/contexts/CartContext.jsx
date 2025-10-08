@@ -20,19 +20,35 @@ export function CartProvider({ children }) {
     const savedCart = localStorage.getItem('u3-cart');
     if (savedCart) {
       try {
-        setCart(JSON.parse(savedCart));
+        const parsedCart = JSON.parse(savedCart);
+        // Validate cart items
+        if (Array.isArray(parsedCart)) {
+          setCart(parsedCart);
+        }
       } catch (error) {
         console.error('Error loading cart from localStorage:', error);
+        // Clear invalid cart data
+        localStorage.removeItem('u3-cart');
       }
     }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('u3-cart', JSON.stringify(cart));
+    try {
+      localStorage.setItem('u3-cart', JSON.stringify(cart));
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   }, [cart]);
 
   const addToCart = (product, quantity = 1, buttonElement = null) => {
+    // Validate product
+    if (!product || !product._id) {
+      console.error('Invalid product provided to addToCart');
+      return;
+    }
+
     // Trigger flying animation
     if (buttonElement) {
       const buttonRect = buttonElement.getBoundingClientRect();
@@ -75,10 +91,19 @@ export function CartProvider({ children }) {
   };
 
   const removeFromCart = (productId) => {
+    if (!productId) {
+      console.error('Invalid product ID provided to removeFromCart');
+      return;
+    }
     setCart(prevCart => prevCart.filter(item => item._id !== productId));
   };
 
   const updateQuantity = (productId, quantity) => {
+    if (!productId) {
+      console.error('Invalid product ID provided to updateQuantity');
+      return;
+    }
+    
     if (quantity <= 0) {
       removeFromCart(productId);
     } else {
@@ -95,11 +120,15 @@ export function CartProvider({ children }) {
   };
 
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return cart.reduce((total, item) => {
+      const price = parseFloat(item.price) || 0;
+      const quantity = parseInt(item.quantity) || 0;
+      return total + (price * quantity);
+    }, 0);
   };
 
   const getCartItemCount = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+    return cart.reduce((total, item) => total + (parseInt(item.quantity) || 0), 0);
   };
 
   const removeFlyingNumber = (id) => {

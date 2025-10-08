@@ -2,8 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { MONGO_URI, PORT } = require('./config');
-
 const path = require('path');
+const fs = require('fs');
+
+// Ensure upload directories exist
+const uploadDir = path.join(__dirname, 'uploads');
+const paymentsDir = path.join(uploadDir, 'payments');
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+if (!fs.existsSync(paymentsDir)) {
+  fs.mkdirSync(paymentsDir, { recursive: true });
+}
 
 // const productRoutes = require('./routes/productRoutes'); // replaced by unified products router with uploads
 const adminRoutes = require('./routes/adminRoutes');

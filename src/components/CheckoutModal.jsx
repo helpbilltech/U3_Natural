@@ -13,10 +13,12 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
   });
   const [paymentScreenshot, setPaymentScreenshot] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
     try {
       const formData = new FormData();
@@ -37,11 +39,12 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
         onOrderPlaced(order);
         onClose();
       } else {
-        throw new Error('Failed to place order');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to place order');
       }
     } catch (error) {
       console.error('Error placing order:', error);
-      alert('Failed to place order. Please try again.');
+      setError(error.message || 'Failed to place order. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -49,7 +52,18 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    // Validate file type
+    if (file && !file.type.startsWith('image/')) {
+      setError('Please upload an image file (PNG, JPG, or JPEG)');
+      return;
+    }
+    // Validate file size (max 5MB)
+    if (file && file.size > 5 * 1024 * 1024) {
+      setError('File size must be less than 5MB');
+      return;
+    }
     setPaymentScreenshot(file);
+    setError('');
   };
 
   if (!isOpen) return null;
@@ -79,6 +93,12 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
               ×
             </button>
           </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
 
           {step === 1 && (
             <motion.div
@@ -191,7 +211,7 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
                         <div>
                           <div className="text-4xl mb-2">📸</div>
                           <div className="text-gray-600">Click to upload payment screenshot</div>
-                          <div className="text-sm text-gray-500 mt-1">PNG, JPG, or JPEG files only</div>
+                          <div className="text-sm text-gray-500 mt-1">PNG, JPG, or JPEG files only (max 5MB)</div>
                         </div>
                       )}
                     </label>
@@ -208,7 +228,7 @@ export default function CheckoutModal({ isOpen, onClose, onOrderPlaced }) {
                   </button>
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !paymentScreenshot}
                     className="flex-1 bg-[var(--rose-600)] hover:bg-[var(--rose-500)] disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold transition-colors"
                   >
                     {isSubmitting ? 'Placing Order...' : 'Place Order'}

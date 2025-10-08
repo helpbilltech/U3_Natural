@@ -46,7 +46,7 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
       products: orderProducts, 
       total,
       customerInfo: customerData,
-      paymentScreenshot: req.file ? `/orders/payments/${req.file.filename}` : null
+      paymentScreenshot: req.file ? `/api/orders/payments/${req.file.filename}` : null
     });
     
     await order.save();
@@ -60,7 +60,7 @@ router.post('/', upload.single('paymentScreenshot'), async (req, res) => {
 // Get all orders (admin only)
 router.get('/', auth, async (req, res) => {
   try {
-    const orders = await Order.find().populate('products.product').sort({ createdAt: -1 });
+    const orders = await Order.find().sort({ createdAt: -1 });
     res.json(orders);
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -72,7 +72,7 @@ router.get('/', auth, async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const orderId = req.params.id.trim(); // Remove any leading/trailing spaces
-    const order = await Order.findById(orderId).populate('products.product');
+    const order = await Order.findById(orderId);
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }

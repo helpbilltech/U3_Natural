@@ -333,7 +333,7 @@ export default function Home() {
           <div className="h-1 w-24 mx-auto bg-[#d98893] rounded-full mb-6"></div>
           <p className="text-center text-[#6b7280] max-w-3xl mx-auto mb-10">Founded with a passion for natural beauty and wellness, U3 Natural Product creates premium skincare solutions using only the finest natural ingredients.</p>
 
-          {/* Text-focused story card (image removed) */}
+          {/* Replaced the image with a text-focused card */}
           <div className="bg-white rounded-3xl shadow-lg max-w-4xl mx-auto p-8" style={{ boxShadow: "var(--soft-shadow)" }}>
             <div className="text-center text-[#6b7280] leading-relaxed space-y-4">
               <p>

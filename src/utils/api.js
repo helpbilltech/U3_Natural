@@ -39,83 +39,139 @@ export async function fetchProducts() {
 }
 
 export async function fetchProduct(id) {
-  const res = await fetch(`${API_URL}/products/${id}`);
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/products/${id}`);
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    throw error;
+  }
 }
 
 export async function createProduct(product, token, isFormData = false) {
-  const res = await fetch(`${API_URL}/products`, {
-    method: 'POST',
-    headers: isFormData ? { Authorization: `Bearer ${token}` } : {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: isFormData ? product : JSON.stringify(product)
-  });
-  
-  if (!res.ok) {
-    const error = await res.json();
-    return { error: true, message: error.message || 'Failed to create product' };
+  try {
+    const res = await fetch(`${API_URL}/products`, {
+      method: 'POST',
+      headers: isFormData ? { Authorization: `Bearer ${token}` } : {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: isFormData ? product : JSON.stringify(product)
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      return { error: true, message: error.message || 'Failed to create product' };
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error creating product:', error);
+    return { error: true, message: 'Failed to create product' };
   }
-  
-  return res.json();
 }
 
 export async function updateProduct(id, product, token, isFormData = false) {
-  const res = await fetch(`${API_URL}/products/${id}`, {
-    method: 'PUT',
-    headers: isFormData ? { Authorization: `Bearer ${token}` } : {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    },
-    body: isFormData ? product : JSON.stringify(product)
-  });
-  
-  if (!res.ok) {
-    const error = await res.json();
-    return { error: true, message: error.message || 'Failed to update product' };
+  try {
+    const res = await fetch(`${API_URL}/products/${id}`, {
+      method: 'PUT',
+      headers: isFormData ? { Authorization: `Bearer ${token}` } : {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: isFormData ? product : JSON.stringify(product)
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      return { error: true, message: error.message || 'Failed to update product' };
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error updating product:', error);
+    return { error: true, message: 'Failed to update product' };
   }
-  
-  return res.json();
 }
 
 export async function deleteProduct(id, token) {
-  const res = await fetch(`${API_URL}/products/${id}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`
+  try {
+    const res = await fetch(`${API_URL}/products/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      return { error: true, message: error.message || 'Failed to delete product' };
     }
-  });
-  
-  if (!res.ok) {
-    const error = await res.json();
-    return { error: true, message: error.message || 'Failed to delete product' };
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    return { error: true, message: 'Failed to delete product' };
   }
-  
-  return res.json();
 }
 
 export async function loginAdmin(username, password) {
-  const res = await fetch(`${API_URL}/admin/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/admin/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      return { error: true, message: error.message || 'Login failed' };
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error logging in:', error);
+    return { error: true, message: 'Login failed' };
+  }
 }
 
 export async function getSalesAnalytics(token) {
-  const res = await fetch(`${API_URL}/dashboard/sales`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/dashboard/sales`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to fetch sales analytics');
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching sales analytics:', error);
+    throw error;
+  }
 }
 
 export async function getAnalytics(token) {
-  const res = await fetch(`${API_URL}/analytics`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${API_URL}/analytics`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.message || 'Failed to fetch analytics');
+    }
+    
+    return res.json();
+  } catch (error) {
+    console.error('Error fetching analytics:', error);
+    throw error;
+  }
 }
 
 // Note: placeOrder function removed - now using CheckoutModal component

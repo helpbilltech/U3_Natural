@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+  const [name, setName] = useState('');
+  const [senderEmail, setSenderEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const contactEmail = 'yusramoh09@gmail.com';
+  const phone = '+251917101717';
+  const tiktok = 'https://www.tiktok.com/@naturalproduct06?_t=ZM-90NB1WnNhcJ&_r=1';
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = async (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitStatus('success');
-      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-    }, 2000);
+    // Build mailto URL to open user's mail client with prefilled subject/body
+    const subject = encodeURIComponent(`Contact from ${name || 'Website Visitor'}`);
+    const body = encodeURIComponent(
+      `Name: ${name || '-'}\nEmail: ${senderEmail || '-'}\n\nMessage:\n${message || '-'}`
+    );
+    const mailto = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+    window.location.href = mailto;
+  }
+
+  return (
+    <>
+      <Navbar />
+      <main className="max-w-7xl mx-auto px-4 py-12">
+        <h1 className="text-3xl md:text-4xl font-extrabold mb-4">Contact</h1>
+        <p className="text-[#6b7280] mb-6">Have questions? Get in touch and we’ll get back to you.</p>
+
+        <div className="mb-8 grid md:grid-cols-2 gap-6 max-w-3xl">
+          <div className="bg-white rounded-2xl p-6 shadow">
+            <h3 className="
   };
 
   return (

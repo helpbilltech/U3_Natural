@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: u3-app
+    env: node
+    buildCommand: bash render-build.sh
+    startCommand: cd backend && node app.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORT
+        value: 10000

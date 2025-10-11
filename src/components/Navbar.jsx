@@ -1,238 +1,121 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import logo from "../assets/logo.png";
-import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "../contexts/CartContext";
-import SearchModal from "./SearchModal";
-
-const links = [
-  { to: "/", label: "Home" },
-  { to: "/products", label: "Products" },
-  { to: "/track-order", label: "Track Order" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
-];
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../contexts/CartContext';
+import logo from '../assets/logo.png';
 
 export default function Navbar() {
-  const { pathname } = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { getCartItemCount } = useCart();
+  const location = useLocation();
+  const cartItemCount = getCartItemCount();
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Products', path: '/products' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' },
+    { name: 'Track Order', path: '/track-order' }
+  ];
 
   return (
-    <header className="w-full z-30 bg-transparent sticky top-0">
-      <motion.nav
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="max-w-7xl mx-auto mt-4 flex items-center justify-between px-4 sm:px-6 py-3 rounded-2xl glass-card"
-      >
-        <Link to="/" className="flex items-center gap-2 group">
-          <motion.img
-            src={logo}
-            alt="U3 Natural Product"
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow group-hover:shadow-lg transition-all duration-300"
-            initial={{ scale: 0.9, rotate: -8 }}
-            animate={{ scale: 1, rotate: [0, 10, 0] }}
-            whileHover={{ 
-              scale: 1.1, 
-              rotate: [0, -5, 5, 0],
-              transition: { duration: 0.5 }
-            }}
-            transition={{ duration: 1.2 }}
-            style={{ borderRadius: "50%" }}
-          />
-          <motion.span 
-            className="ml-2 text-lg sm:text-2xl font-extrabold text-[var(--rose-600)] tracking-tight group-hover:text-[var(--rose-500)] transition-colors duration-300"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          >
-            U3 Natural
-          </motion.span>
-        </Link>
-        
-        {/* Desktop Navigation */}
-        <ul className="hidden md:flex items-center gap-2">
-          {links.map((link, index) => (
-            <motion.li 
-              key={link.to}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <motion.div
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
+    <nav className="bg-white shadow-md sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <img className="h-12 w-12 rounded-full" src={logo} alt="U3 Natural" />
+              <span className="ml-2 text-xl font-bold text-[#8b5b60] hidden sm:block">U3 Natural</span>
+            </Link>
+          </div>
+          
+          {/* Desktop menu */}
+          <div className="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+            {navLinks.map((link) => (
               <Link
-                to={link.to}
-                className={
-                    "text-sm lg:text-base font-semibold px-4 py-2 rounded-full transition-all duration-300 " +
-                  (pathname === link.to
-                      ? "bg-[var(--rose-500)] text-white shadow-lg"
-                      : "text-[#171717] hover:bg-[#fff4f6] hover:text-[var(--rose-600)] hover:shadow-md")
-                }
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  location.pathname === link.path
+                    ? 'text-[#d98893] bg-[#fff4f6]'
+                    : 'text-gray-700 hover:text-[#d98893] hover:bg-gray-50'
+                }`}
               >
-                {link.label}
+                {link.name}
               </Link>
-              </motion.div>
-            </motion.li>
-          ))}
-        </ul>
-
-        {/* Desktop Icons */}
-        <div className="hidden md:flex items-center gap-3 text-[#9ca3af]">
-          <motion.button 
-            aria-label="Search" 
-            className="p-2 rounded-full hover:bg-[#fff8f2]"
-            onClick={() => setIsSearchOpen(true)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </motion.button>
-          <motion.div
-            className="relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link to="/cart" aria-label="Cart" className="p-2 rounded-full hover:bg-[#fff8f2] relative">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              {getCartItemCount() > 0 && (
+            ))}
+          </div>
+          
+          <div className="flex items-center">
+            <Link to="/cart" className="relative p-2 cart-icon">
+              <svg className="h-6 w-6 text-gray-700 hover:text-[#d98893] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              {cartItemCount > 0 && (
                 <motion.span
-                  className="absolute -top-1 -right-1 bg-[var(--rose-500)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
+                  className="absolute -top-1 -right-1 bg-[#d98893] text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 >
-                  {getCartItemCount()}
+                  {cartItemCount}
                 </motion.span>
               )}
             </Link>
-          </motion.div>
-        </div>
-
-        {/* Mobile Icons */}
-        <div className="md:hidden flex items-center gap-2">
-          {/* Mobile Cart Icon */}
-          <motion.div
-            className="relative"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Link to="/cart" aria-label="Cart" className="p-2 rounded-full hover:bg-[#fff8f2] relative">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              {getCartItemCount() > 0 && (
-                <motion.span
-                  className="absolute -top-1 -right-1 bg-[var(--rose-500)] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 500 }}
-                >
-                  {getCartItemCount()}
-                </motion.span>
-              )}
+            
+            <Link to="/admin" className="ml-4 p-2">
+              <svg className="h-6 w-6 text-gray-700 hover:text-[#d98893] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
             </Link>
-          </motion.div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-full hover:bg-[#fff8f2] transition-colors duration-200"
-            aria-label="Toggle menu"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ duration: 0.2 }}
-          >
-            <motion.svg 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2"
-              animate={{ rotate: isMobileMenuOpen ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+            
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden ml-4 p-2 rounded-md text-gray-700 hover:text-[#d98893] hover:bg-gray-100 focus:outline-none"
             >
-              {isMobileMenuOpen ? (
-                <motion.path 
-                  d="M18 6L6 18M6 6l12 12"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                />
-              ) : (
-                <motion.path 
-                  d="M3 12h18M3 6h18M3 18h18"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                />
-              )}
-            </motion.svg>
-          </motion.button>
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
-      </motion.nav>
-
-      {/* Mobile Menu */}
+      </div>
+      
+      {/* Mobile menu */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
+        {isMenuOpen && (
           <motion.div
+            className="md:hidden"
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mx-4 mt-2 rounded-2xl glass-card overflow-hidden"
+            transition={{ duration: 0.3 }}
           >
-            <div className="px-6 py-4 space-y-2">
-              {links.map((link, index) => (
-                <motion.div
-                  key={link.to}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                    location.pathname === link.path
+                      ? 'text-[#d98893] bg-[#fff4f6]'
+                      : 'text-gray-700 hover:text-[#d98893] hover:bg-gray-50'
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
                 >
-                  <motion.div
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Link
-                      to={link.to}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={
-                        "block text-base font-semibold px-4 py-3 rounded-full transition-all duration-300 " +
-                        (pathname === link.to
-                          ? "bg-[var(--rose-500)] text-white shadow-lg"
-                          : "text-[#171717] hover:bg-[#fff4f6] hover:text-[var(--rose-600)] hover:shadow-md")
-                      }
-                    >
-                      {link.label}
-                    </Link>
-                  </motion.div>
-                </motion.div>
+                  {link.name}
+                </Link>
               ))}
-              <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
-                <motion.button 
-                  aria-label="Search" 
-                  className="p-2 rounded-full hover:bg-[#fff8f2]"
-                  onClick={() => {
-                    setIsSearchOpen(true);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                </motion.button>
-              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-      
-      {/* Search Modal */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </header>
+    </nav>
   );
 }

@@ -58,7 +58,7 @@ export function CartProvider({ children }) {
       };
       
       // Get cart icon position
-      const cartIcon = document.querySelector('[aria-label="Cart"]');
+      const cartIcon = document.querySelector('[aria-label="Cart"]') || document.querySelector('.cart-icon');
       const endPosition = cartIcon ? {
         x: cartIcon.getBoundingClientRect().left + cartIcon.getBoundingClientRect().width / 2,
         y: cartIcon.getBoundingClientRect().top + cartIcon.getBoundingClientRect().height / 2

@@ -54,6 +54,15 @@ function AnimatedRoutes() {
             </motion.div>
           }
         />
+        {/* Catch-all route for SPA routing */}
+        <Route
+          path="*"
+          element={
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.25 }}>
+              <Home />
+            </motion.div>
+          }
+        />
       </Routes>
     </AnimatePresence>
   );
@@ -61,7 +70,7 @@ function AnimatedRoutes() {
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <BrowserRouter>
       <CartProvider>
         <AnimatedRoutes />
       </CartProvider>

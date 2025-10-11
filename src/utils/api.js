@@ -1,6 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const BASE_URL = API_URL.replace(/\/?api\/?$/, '');
 
+// Helper function to get auth headers
+function getAuthHeaders() {
+  const token = localStorage.getItem('admin_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export function getImageUrl(imagePath) {
   if (!imagePath) return '';
   if (/^https?:\/\//.test(imagePath)) return imagePath;
@@ -21,16 +27,13 @@ export function getImageUrl(imagePath) {
 
 export async function fetchProducts() {
   try {
-    console.log('Fetching products from:', `${API_URL}/products`);
     const res = await fetch(`${API_URL}/products`);
-    console.log('Response status:', res.status);
     
     if (!res.ok) {
       throw new Error(`HTTP error! status: ${res.status}`);
     }
     
     const data = await res.json();
-    console.log('Fetched products data:', data);
     return data;
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -53,12 +56,16 @@ export async function fetchProduct(id) {
 
 export async function createProduct(product, token, isFormData = false) {
   try {
+    const headers = isFormData 
+      ? { ...getAuthHeaders(token) } 
+      : { 
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(token)
+        };
+    
     const res = await fetch(`${API_URL}/products`, {
       method: 'POST',
-      headers: isFormData ? { Authorization: `Bearer ${token}` } : {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
+      headers,
       body: isFormData ? product : JSON.stringify(product)
     });
     
@@ -76,12 +83,16 @@ export async function createProduct(product, token, isFormData = false) {
 
 export async function updateProduct(id, product, token, isFormData = false) {
   try {
+    const headers = isFormData 
+      ? { ...getAuthHeaders(token) } 
+      : { 
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(token)
+        };
+    
     const res = await fetch(`${API_URL}/products/${id}`, {
       method: 'PUT',
-      headers: isFormData ? { Authorization: `Bearer ${token}` } : {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
+      headers,
       body: isFormData ? product : JSON.stringify(product)
     });
     
@@ -101,9 +112,7 @@ export async function deleteProduct(id, token) {
   try {
     const res = await fetch(`${API_URL}/products/${id}`, {
       method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: getAuthHeaders(token)
     });
     
     if (!res.ok) {
@@ -141,7 +150,7 @@ export async function loginAdmin(username, password) {
 export async function getSalesAnalytics(token) {
   try {
     const res = await fetch(`${API_URL}/dashboard/sales`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: getAuthHeaders(token)
     });
     
     if (!res.ok) {
@@ -159,7 +168,7 @@ export async function getSalesAnalytics(token) {
 export async function getAnalytics(token) {
   try {
     const res = await fetch(`${API_URL}/analytics`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: getAuthHeaders(token)
     });
     
     if (!res.ok) {

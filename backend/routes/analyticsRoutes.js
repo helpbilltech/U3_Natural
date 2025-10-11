@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const auth = require('../middleware/auth');
+const { adminAuth } = require('../middleware/adminAuth');
 
 // Get comprehensive analytics data
-router.get('/', auth, async (req, res) => {
+router.get('/', adminAuth, async (req, res) => {
   try {
     // Get all confirmed/delivered orders (all-time data)
     const orders = await Order.find({

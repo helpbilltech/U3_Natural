@@ -1,63 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-export default function FlyingNumber({ 
-  number, 
-  startPosition, 
-  endPosition, 
-  onComplete 
-}) {
-  const [isVisible, setIsVisible] = useState(true);
-
+export default function FlyingNumber({ number, startPosition, endPosition, onComplete }) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);
-      onComplete?.();
+      onComplete();
     }, 1000);
-
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  if (!isVisible) return null;
-
   return (
     <motion.div
-      className="fixed z-50 pointer-events-none"
-      style={{
-        left: startPosition.x,
-        top: startPosition.y,
-      }}
-      initial={{ 
-        scale: 0.8,
+      className="fixed pointer-events-none z-50 bg-[#d98893] text-white rounded-full w-12 h-12 flex items-center justify-center font-bold shadow-lg"
+      initial={{
+        x: startPosition.x,
+        y: startPosition.y,
         opacity: 1,
-        x: 0,
-        y: 0
+        scale: 1
       }}
-      animate={{ 
-        scale: [0.8, 1.2, 1],
-        opacity: [1, 1, 0],
-        x: endPosition.x - startPosition.x,
-        y: endPosition.y - startPosition.y
+      animate={{
+        x: endPosition.x,
+        y: endPosition.y,
+        opacity: 0,
+        scale: 0.2
       }}
-      transition={{ 
-        duration: 0.8,
-        ease: "easeOut",
-        times: [0, 0.3, 1]
+      transition={{
+        duration: 1,
+        ease: "easeOut"
+      }}
+      style={{
+        left: 0,
+        top: 0
       }}
     >
-      <motion.div
-        className="bg-[var(--rose-500)] text-white text-sm font-bold rounded-full w-6 h-6 flex items-center justify-center shadow-lg"
-        animate={{ 
-          scale: [1, 1.3, 1],
-          rotate: [0, 10, -10, 0]
-        }}
-        transition={{ 
-          duration: 0.8,
-          ease: "easeOut"
-        }}
-      >
-        {number}
-      </motion.div>
+      +{number}
     </motion.div>
   );
 }

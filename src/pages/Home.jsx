@@ -175,7 +175,7 @@ export default function Home() {
             Discover our most popular natural skincare products, carefully formulated with premium ingredients to enhance your natural beauty.
           </motion.p>
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden"
             animate="visible"
             variants={{
@@ -187,7 +187,7 @@ export default function Home() {
               }
             }}
           >
-            {products.map((product) => {
+            {products.slice(0, 6).map((product) => {
               const imgSrc = getImageUrl(product.image);
               return (
                 <motion.div
@@ -195,11 +195,11 @@ export default function Home() {
                   whileHover={{ 
                     y: -12, 
                     scale: 1.05, 
-                    boxShadow: "0 20px 40px 0 rgba(217, 136, 147, 0.3)",
+                    boxShadow: "0 25px 50px 0 rgba(217, 136, 147, 0.3)",
                     transition: { duration: 0.3, ease: "easeOut" }
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-white rounded-3xl p-6 shadow-lg transition-all duration-300 cursor-pointer group"
+                  className="bg-white rounded-3xl p-6 shadow-lg transition-all duration-300 cursor-pointer group border border-[#f0f0f0] hover:border-[#d98893]/30"
                   style={{ boxShadow: "var(--soft-shadow)" }}
                   initial={{ opacity: 0, y: 30, rotate: -2 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -212,8 +212,8 @@ export default function Home() {
                 >
                   <Link to={`/product/${product._id}`} className="block">
                     <motion.div 
-                      className="bg-white rounded-2xl mb-5 flex items-center justify-center overflow-hidden group-hover:shadow-lg transition-all duration-300" 
-                      style={{ minHeight: 196 }}
+                      className="bg-white rounded-2xl mb-5 flex items-center justify-center overflow-hidden group-hover:shadow-lg transition-all duration-300 relative"
+                      style={{ minHeight: 200 }}
                       whileHover={{ scale: 1.02 }}
                     >
                       <motion.img
@@ -230,49 +230,65 @@ export default function Home() {
                         whileHover={{ scale: 1.1 }}
                         transition={{ duration: 0.3 }}
                       />
+                      {/* Badge for new or popular products */}
+                      {product.category === "Masks" && (
+                        <div className="absolute top-3 right-3 bg-[#d98893] text-white text-xs font-bold px-3 py-1 rounded-full">
+                          POPULAR
+                        </div>
+                      )}
                     </motion.div>
                     <motion.div 
-                      className="flex flex-col gap-1"
+                      className="flex flex-col gap-2"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2 }}
                     >
                       <motion.span 
-                        className="font-semibold text-xl group-hover:text-[var(--rose-600)] transition-colors duration-300"
+                        className="font-bold text-lg group-hover:text-[var(--rose-600)] transition-colors duration-300 line-clamp-1"
                         whileHover={{ scale: 1.02 }}
                       >
                         {product.name}
                       </motion.span>
-                      <motion.span 
-                        className="text-[var(--rose-600)] font-bold text-lg"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.2 }}
+                      <motion.p 
+                        className="text-sm text-[#6b7280] line-clamp-2"
                       >
-                        {product.price} ETB
-                      </motion.span>
-                      <motion.span 
-                        className="text-sm text-[#8b8b8b] group-hover:text-[var(--rose-500)] transition-colors duration-300"
-                      >
-                        {product.category}
-                      </motion.span>
-                      <motion.button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          addToCart(product);
-                        }}
-                        className="mt-2 bg-[var(--rose-600)] hover:bg-[var(--rose-500)] text-white px-4 py-1 rounded-full text-sm font-semibold transition-colors duration-300"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                      >
-                        Add to Cart
-                      </motion.button>
+                        {product.description}
+                      </motion.p>
+                      <div className="flex items-center justify-between mt-2">
+                        <motion.span 
+                          className="text-[var(--rose-600)] font-bold text-xl"
+                          whileHover={{ scale: 1.05 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          {product.price} ETB
+                        </motion.span>
+                        <motion.button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            addToCart(product, 1, e.target);
+                          }}
+                          className="bg-[var(--rose-600)] hover:bg-[var(--rose-500)] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-300 flex items-center gap-1"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                          </svg>
+                          Add
+                        </motion.button>
+                      </div>
                     </motion.div>
                   </Link>
                 </motion.div>
               );
             })}
           </motion.div>
+          <div className="text-center mt-10">
+            <Link to="/products" className="inline-block bg-white border-2 border-[var(--rose-600)] text-[var(--rose-600)] hover:bg-[var(--rose-600)] hover:text-white px-6 py-3 rounded-full font-semibold transition-all duration-300">
+              View All Products
+            </Link>
+          </div>
         </motion.section>
 
         {/* Feature Cards after products */}
